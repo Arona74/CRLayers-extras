@@ -67,7 +67,8 @@ public class GrassSpreadHandler {
                             mutablePos.setY(checkY);
                             BlockState checkState = world.getBlockState(mutablePos);
 
-                            if (Registries.BLOCK.getId(checkState.getBlock()).equals(GRASS_LAYER_ID)) {
+                            if (Registries.BLOCK.getId(checkState.getBlock()).equals(GRASS_LAYER_ID)
+                                    || checkState.isOf(Blocks.GRASS_BLOCK)) {
                                 trySpreadGrass(world, mutablePos.toImmutable());
                                 break; // Found grass, try to spread it
                             } else if (!checkState.isAir() && checkState.isOpaque()) {
@@ -99,8 +100,9 @@ public class GrassSpreadHandler {
     private static void trySpreadGrass(World world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
 
-        // Check if this is a grass layer block
-        if (!Registries.BLOCK.getId(state.getBlock()).equals(GRASS_LAYER_ID)) {
+        // Check if this is a grass layer block or vanilla grass block
+        if (!Registries.BLOCK.getId(state.getBlock()).equals(GRASS_LAYER_ID)
+                && !state.isOf(Blocks.GRASS_BLOCK)) {
             return;
         }
 
