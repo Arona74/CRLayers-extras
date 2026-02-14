@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import io.arona74.crlayersextras.ModConfig;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EatGrassGoal.class)
@@ -39,6 +40,8 @@ public class EatGrassGoalMixin {
      */
     @Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
     private void canStartWithGrassLayer(CallbackInfoReturnable<Boolean> cir) {
+        if (!ModConfig.getInstance().enableSheepEatingGrassLayers) return;
+
         BlockPos pos = this.mob.getBlockPos();
         BlockState state = this.world.getBlockState(pos);
 
@@ -62,6 +65,8 @@ public class EatGrassGoalMixin {
      */
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/lang/Math;max(II)I", shift = At.Shift.AFTER))
     private void tickWithGrassLayer(CallbackInfo ci) {
+        if (!ModConfig.getInstance().enableSheepEatingGrassLayers) return;
+
         // Inject AFTER timer decrement. At timer == 4, the eating happens
         if (this.timer == 4) {
             BlockPos pos = this.mob.getBlockPos();

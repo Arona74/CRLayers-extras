@@ -12,6 +12,9 @@ public class CRLayersExtras implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Initializing CRLayers Extras - Making Conquest Reforged layers behave naturally!");
 
+        // Load config
+        ModConfig.load();
+
         // Register event handlers
         GrassSpreadHandler.register();
         MyceliumSpreadHandler.register();

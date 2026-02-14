@@ -24,6 +24,8 @@ public class GrassSpreadHandler {
     }
 
     private static void onWorldTick(ServerWorld world) {
+        if (!ModConfig.getInstance().enableGrassSpreading) return;
+
         // Get the randomTickSpeed value (default is 3)
         int randomTickSpeed = world.getGameRules().getInt(net.minecraft.world.GameRules.RANDOM_TICK_SPEED);
 

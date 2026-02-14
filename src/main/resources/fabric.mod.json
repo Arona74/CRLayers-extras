@@ -16,6 +16,9 @@
   "entrypoints": {
     "main": [
       "io.arona74.crlayersextras.CRLayersExtras"
+    ],
+    "modmenu": [
+      "io.arona74.crlayersextras.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -28,6 +31,8 @@
     "java": ">=17"
   },
   "suggests": {
-    "conquestre": "*"
+    "conquestre": "*",
+    "modmenu": "*",
+    "cloth-config2": "*"
   }
 }

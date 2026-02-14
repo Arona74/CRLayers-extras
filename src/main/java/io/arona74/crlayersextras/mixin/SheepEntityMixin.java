@@ -1,5 +1,6 @@
 package io.arona74.crlayersextras.mixin;
 
+import io.arona74.crlayersextras.ModConfig;
 import io.arona74.crlayersextras.SheepGrassEatingHandler;
 import net.minecraft.entity.passive.SheepEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,6 +13,8 @@ public class SheepEntityMixin {
 
     @Inject(method = "onEatingGrass", at = @At("HEAD"))
     private void onEatingGrass(CallbackInfo ci) {
+        if (!ModConfig.getInstance().enableSheepEatingGrassLayers) return;
+
         SheepEntity sheep = (SheepEntity) (Object) this;
         SheepGrassEatingHandler.tryEatGrassLayer(sheep);
     }
