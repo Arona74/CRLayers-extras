@@ -8,6 +8,7 @@ This mod adds natural mechanics to Conquest Reforged layer blocks:
 
 ### 1. Grass Spreading
 - `conquest:grass_block_layer` now spreads to `conquest:loamy_dirt_slab` blocks
+- `minecraft:grass_block` also spreads to nearby `conquest:loamy_dirt_slab` blocks
 - Mimics vanilla `minecraft:grass_block` spreading to `minecraft:dirt`
 - Requires proper light levels (light level 9+ at source, 4+ at target)
 
@@ -21,12 +22,27 @@ This mod adds natural mechanics to Conquest Reforged layer blocks:
 - Converts them to `conquest:loamy_dirt_slab` (similar to vanilla grass → dirt conversion)
 - Sheep will regrow their wool after eating, just like in vanilla
 
+### 4. Prevent Grass Block Decay
+- Prevents `minecraft:grass_block` from turning into dirt when covered by a block (light level 0)
+- Useful for building with grass blocks underground or under structures
+
+## Configuration
+
+All features can be toggled on or off individually. The config file is located at `config/crlayers-extras.json` and is created automatically on first launch.
+
+### Mod Menu Support
+If you have [Mod Menu](https://modrinth.com/mod/modmenu) and [Cloth Config](https://modrinth.com/mod/cloth-config) installed, you can change settings in-game through the Mod Menu config screen. Changes take effect immediately without restarting.
+
 ## Installation
 
 1. Download the latest release from the releases page
 2. Place the JAR file in your `.minecraft/mods` folder
 3. Make sure you have Fabric Loader and Fabric API installed
 4. Works best alongside Conquest Reforged mod
+
+### Optional Dependencies
+- [Mod Menu](https://modrinth.com/mod/modmenu) - for in-game config screen
+- [Cloth Config](https://modrinth.com/mod/cloth-config) - required for the config screen
 
 ## Building from Source
 
