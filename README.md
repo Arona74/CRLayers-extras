@@ -52,7 +52,21 @@ Both can be installed at once — each feature activates only for the blocks it 
 - Extra plants from other mods (e.g. `conquest:seagrass`) can be added via the config
 - Purely visual — it does not change collision, placement rules or what the server thinks is there
 
-> **1.21.11 and newer pick plants by block type** (anything extending `VegetationBlock`), so plants added by newer Minecraft versions — `bush`, `firefly_bush`, `leaf_litter`, `wildflowers`, `short_dry_grass`, `cactus_flower` and so on — are handled automatically. 1.20.1 and 1.21.1 use a fixed list of the plants that exist on those versions. `AdditionalOffsetBlocks` works the same way on all five.
+> **1.21.11 and newer pick vanilla plants by block type** (anything in the `minecraft` namespace extending `VegetationBlock`), so plants added by newer Minecraft versions — `bush`, `firefly_bush`, `leaf_litter`, `wildflowers`, `short_dry_grass`, `cactus_flower` and so on — are handled automatically. 1.20.1 and 1.21.1 use a fixed list of the plants that exist on those versions. `AdditionalOffsetBlocks` works the same way on all five.
+
+> **Modded plants are never picked up automatically**, on any version. Most Conquest Reforged plants already sit correctly on layer blocks by themselves — they track the layer height in their own blockstate — so offsetting them again would push them into the block below. Only add a modded plant to `AdditionalOffsetBlocks` if you can see it floating.
+
+### 7. Wet Sand Near Water (Conquest Reforged)
+
+- Sand touching water turns into the Conquest wet variant — `minecraft:sand` → `conquest:wet_sand`, `conquest:tan_sand_layer` → `conquest:wet_tan_sand_layer`, and so on
+- "Touching water" means water on any of the six faces, a waterlogged neighbour, or the block being waterlogged itself
+- Wet sand with no water left on any face dries back into its dry counterpart
+- Layer properties (`layers`, `waterlogged`) carry across the swap
+- The block pairs are config data (`WetSandMappings`), not hardcoded — add your own, or delete pairs you do not want
+
+> **Two things worth knowing before you leave this on.** It converts in bulk: every shoreline, river bed and shallow sea floor near a player is rewritten as chunks load, and the drying direction applies to wet sand you placed deliberately — park `conquest:wet_sand` in a dry desert and it will become `minecraft:sand`, which then *falls*. If you want wet sand as plain decoration away from water, drop the `"minecraft:sand"` pair from `WetSandMappings` (or turn `enableWetSands` off) rather than fighting it.
+
+> Only near-surface blocks are scanned — 32 blocks down from the top of each column. Sand at the bottom of a deep ocean, or sealed in a cave next to a waterlogged block, is left alone.
 
 ## Requirements
 
@@ -80,18 +94,21 @@ Plus a layer block provider:
 
 > Availability differs per Minecraft version. Conquest Reforged and VanillaLayer+ do not exist on every supported version — check before planning a setup. Without a provider the layer features simply stay inactive; nothing breaks.
 
-### Optional
+### Optional (recommended)
 
 - [Mod Menu](https://modrinth.com/mod/modmenu) — in-game config screen
-- [Cloth Config](https://modrinth.com/mod/cloth-config) — required by the config screen
+- [Cloth Config](https://modrinth.com/mod/cloth-config) — draws that config screen
+
+> Neither is required. They are a pair: install **both** for the in-game config screen, or **neither** and edit `config/aronalayersextras.json` by hand. With Mod Menu but no Cloth Config, the mod loads normally and simply offers no config button — it logs one line saying so.
 
 ## Installation
 
 1. Install Fabric Loader and Fabric API for your Minecraft version (see the table above)
 2. Install the renderer requirement for your version — Indium on 1.20.1, Sodium 0.6.0+ on 1.21.1 and newer
 3. Install Conquest Reforged and/or VanillaLayer+
-4. Place the mod JAR **for your Minecraft version** in your mods folder
-5. Launch once to generate `config/aronalayersextras.json`
+4. Optionally install Mod Menu **and** Cloth Config together, for the in-game config screen
+5. Place the mod JAR **for your Minecraft version** in your mods folder
+6. Launch once to generate `config/aronalayersextras.json`
 
 ## Configuration
 
@@ -104,13 +121,46 @@ All features can be toggled individually. The config file is `config/aronalayers
 | `enableSheepEatingGrassLayers` | `true` | Sheep can eat CR/VLP grass layer blocks |
 | `preventGrassDecay` | `true` | Grass blocks never decay to dirt in darkness |
 | `enableLayersFallWithSand` | `true` | CR/VLP layer blocks fall when sand/gravel falls or is broken |
+| `enableWetSands` | `true` | CR sand blocks touching water turn wet, and dry back when the water goes |
+| `WetSandMappings` | the six pairs below | Dry block → wet block pairs, read in both directions. Pairs whose blocks are not both registered are ignored |
 | `enableBlockOffset` | `true` | Plants are visually shifted down on partial-height layer blocks |
 | `VanillaBlockOffset` | `true` | Vanilla plants receive the visual offset. Set to `false` to restrict the offset to `AdditionalOffsetBlocks` only. **Requires F3+T to take effect.** |
 | `AdditionalOffsetBlocks` | `["conquest:seagrass", "conquest:tall_seagrass", "minecraft:pink_petals"]` | Extra plant block IDs from other mods that also receive the visual offset. **Requires F3+T to take effect.** |
 
+`WetSandMappings` defaults to:
+
+```json
+"WetSandMappings": {
+  "minecraft:sand": "conquest:wet_sand",
+    "conquest:sand_layer": "conquest:wet_sand_layer",
+    "conquest:sand_and_gravel_sand": "conquest:wet_sand_and_gravel_sand",
+    "conquest:sand_and_gravel_sand_layer": "conquest:wet_sand_and_gravel_sand_layer",
+    "conquest:sand_and_vegetation_sand": "conquest:wet_sand_and_vegetation_sand",
+    "conquest:sand_and_vegetation_sand_layer": "conquest:wet_sand_and_vegetation_sand_layer",
+    "conquest:river_sand": "conquest:wet_river_sand",
+    "conquest:river_sand_layer": "conquest:wet_river_sand_layer",
+    "conquest:gray_sand": "conquest:wet_gray_sand",
+    "conquest:gray_sand_layer": "conquest:wet_gray_sand_layer",
+    "conquest:light_gray_sand": "conquest:wet_light_gray_sand",
+    "conquest:light_gray_sand_layer": "conquest:wet_light_gray_sand_layer",
+    "conquest:lime_sand": "conquest:wet_lime_sand",
+    "conquest:lime_sand_layer": "conquest:wet_lime_sand_layer",
+    "conquest:pink_sand": "conquest:wet_pink_sand",
+    "conquest:pink_sand_layer": "conquest:wet_pink_sand_layer",
+    "conquest:purple_sand": "conquest:wet_purple_sand",
+    "conquest:purple_sand_layer": "conquest:wet_purple_sand_layer",
+    "conquest:brown_sand": "conquest:wet_brown_sand",
+    "conquest:brown_sand_layer": "conquest:wet_brown_sand_layer",
+    "conquest:tan_sand": "conquest:wet_tan_sand",
+    "conquest:tan_sand_layer": "conquest:wet_tan_sand_layer"
+}
+```
+
+Edits to it are picked up on the next launch.
+
 ### Mod Menu Support
 
-With [Mod Menu](https://modrinth.com/mod/modmenu) and [Cloth Config](https://modrinth.com/mod/cloth-config) installed, most settings can be changed in-game through the Mod Menu config screen. Changes take effect immediately without restarting — except `VanillaBlockOffset` and `AdditionalOffsetBlocks`, which are applied at model bake time and need a resource reload (F3+T).
+Both mods are optional. With [Mod Menu](https://modrinth.com/mod/modmenu) and [Cloth Config](https://modrinth.com/mod/cloth-config) installed, most settings can be changed in-game through the Mod Menu config screen; without them, every setting is still available by editing the JSON. Changes take effect immediately without restarting — except `VanillaBlockOffset` and `AdditionalOffsetBlocks`, which are applied at model bake time and need a resource reload (F3+T). `WetSandMappings` is JSON-only; the `enableWetSands` toggle beside it is not.
 
 ## Building from Source
 

@@ -20,5 +20,6 @@ public class AronaLayersExtras implements ModInitializer {
         MyceliumSpreadHandler.register();
         SheepGrassEatingHandler.register();
         LayerFallHandler.register();
+        WetSandHandler.register();
     }
 }
