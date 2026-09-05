@@ -37,6 +37,11 @@ public class ModConfig {
             "conquest:tall_seagrass",
             "minecraft:light_gray_petals"
     ));
+    // Extra block IDs that should fall along with the sand or gravel underneath
+    // them, on top of the layer, slab and rock blocks matched automatically.
+    // Only consulted while enableLayersFallWithSand is on.
+    // Example: "somemod:pebbles"
+    public List<String> AdditionalFallingBlocks = new ArrayList<>();
     // Dry block -> wet block pairs used by enableWetSands. A dry block touching water
     // becomes its wet counterpart; a wet block with no water on any of its six faces
     // turns back into the dry one, so the mapping is read in both directions.

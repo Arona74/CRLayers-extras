@@ -41,9 +41,16 @@ Both can be installed at once — each feature activates only for the blocks it 
 
 ### 5. Layer Blocks Fall with Sand/Gravel
 - When sand or gravel falls, CR and VanillaLayer+ layer/slab blocks directly above also fall
+- Conquest's decorative ground rocks (`conquest:limestone_rocks`, `conquest:andesite_rocks` and the rest of the `*_rocks` family) fall too
 - Cascades upward through multiple stacked layer blocks
 - Applies to `minecraft:sand`, `minecraft:red_sand`, and `minecraft:gravel`
 - Also triggers when a player breaks sand/gravel directly (layers above fall immediately)
+- Anything else can be added with `AdditionalFallingBlocks`
+- A block that lands on a partial-height block is placed on top of it rather than breaking, and is waterlogged if it settles in water
+
+> **Why the landing needs help.** A falling block comes to rest wherever its collision box stops, and Minecraft rounds that down to a block position. Land on a full block and that position is the empty space above it; land on a layer, slab or rock and it is *inside* the block just hit, which is not replaceable — so vanilla discards the block and pops it as an item. It is the same reason vanilla sand breaks when it falls onto a slab. Blocks this mod launched are placed one block higher instead; vanilla sand and gravel keep their normal behaviour.
+
+> Rocks are matched on the `_rocks` suffix, which is plural throughout Conquest and only ever used for the loose ground clutter — the solid blocks they are cut from are singular (`conquest:mudstone`, `conquest:dark_tuff`), so they stay put. New Conquest stone types are picked up without a mod update.
 
 ### 6. Plant Visual Offset on Layer Blocks
 - Plants and flowers placed on partial-height layer blocks are shifted downward visually to sit flush with the layer surface
@@ -120,7 +127,8 @@ All features can be toggled individually. The config file is `config/aronalayers
 | `enableMyceliumSpreading` | `true` | Mycelium spreads to CR/VLP dirt layer equivalents |
 | `enableSheepEatingGrassLayers` | `true` | Sheep can eat CR/VLP grass layer blocks |
 | `preventGrassDecay` | `true` | Grass blocks never decay to dirt in darkness |
-| `enableLayersFallWithSand` | `true` | CR/VLP layer blocks fall when sand/gravel falls or is broken |
+| `enableLayersFallWithSand` | `true` | CR/VLP layer, slab and rock blocks fall when sand/gravel falls or is broken |
+| `AdditionalFallingBlocks` | `[]` | Extra block IDs that should also fall with the sand/gravel below them. JSON-only; picked up on the next launch |
 | `enableWetSands` | `true` | CR sand blocks touching water turn wet, and dry back when the water goes |
 | `WetSandMappings` | the six pairs below | Dry block → wet block pairs, read in both directions. Pairs whose blocks are not both registered are ignored |
 | `enableBlockOffset` | `true` | Plants are visually shifted down on partial-height layer blocks |
